@@ -1,0 +1,4 @@
+github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
+github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
+github.com/lock14/collections v0.0.0-20240826042710-acc1ad824d6a h1:PJ4SzdRfXHQEguloN2ffiWHqgEa6aC2fY4i8FgGVqpU=
+github.com/lock14/collections v0.0.0-20240826042710-acc1ad824d6a/go.mod h1:h3dB7fqrblz8ueTTxcAL+DGm8OxtqrLXNYWLRJDOjTA=
