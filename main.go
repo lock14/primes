@@ -1,49 +1,51 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"github.com/lock14/collections/bitset"
 	"iter"
 	"math"
 	"os"
+	"strconv"
 )
 
-var (
-	firstK   = flag.Int("first-k", -1, "output the first k primes")
-	lessThan = flag.Int("less-than", -1, "output primes less than the given value")
-)
-
-func main() {
-	flag.Parse()
-	if *firstK == -1 && *lessThan == -1 {
-		flag.PrintDefaults()
-		os.Exit(1)
-	} else if *firstK != -1 && *lessThan != -1 {
-		flag.PrintDefaults()
-		os.Exit(1)
-	} else if *firstK != -1 {
-		for n := range firstKPrimes(*firstK) {
-			fmt.Println(n)
-		}
-	} else if *lessThan != -1 {
-		for n := range primesLessThan(*lessThan) {
-			fmt.Println(n)
-		}
-	}
-
+var primeGenFuncs = map[string]func(int) iter.Seq[int]{
+	"less-than": primesLessThan,
+	"first-n":   firstNPrimes,
 }
 
-func firstKPrimes(k int) iter.Seq[int] {
-	if k < 1 {
+func main() {
+	if len(os.Args) < 3 {
+		fmt.Println("Usage: primes [less-than N|first-n N]")
+		os.Exit(1)
+	}
+	cmd := os.Args[1]
+	if primeGenFunc, ok := primeGenFuncs[cmd]; ok {
+		n, err := strconv.Atoi(os.Args[2])
+		if err != nil {
+			if _, ioErr := fmt.Fprintf(os.Stderr, "not a valid number: %s\n", os.Args[2]); ioErr != nil {
+				panic(ioErr)
+			}
+			os.Exit(1)
+		}
+		for p := range primeGenFunc(n) {
+			fmt.Println(p)
+		}
+	} else {
+		fmt.Printf("unknown command %q\n", cmd)
+	}
+}
+
+func firstNPrimes(n int) iter.Seq[int] {
+	if n < 1 {
 		return func(yield func(int) bool) {}
 	}
-	bound := int(piInverse(float64(k))) + 4
+	bound := int(piInverse(float64(n))) + 4
 	primes := primesLessThan(bound)
 	return func(yield func(int) bool) {
 		count := 0
 		for p := range primes {
-			if count == k {
+			if count == n {
 				break
 			}
 			yield(p)
