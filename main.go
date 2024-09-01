@@ -57,14 +57,17 @@ func firstNPrimes(n int) iter.Seq[int] {
 func primesLessThan(n int) iter.Seq[int] {
 	b := bitset.New(bitset.NumBits(n))
 	if n > 2 {
+		// 0 and 1 are not prime.
 		b.Set(0)
 		b.Set(1)
+		// all multiples of 2 are not prime.
 		for i := 4; i < n; i += 2 {
 			b.Set(i)
 		}
 		for i := 3; (i*i) > i && (i*i) < n; i += 2 {
 			if !b.Get(i) {
-				// i is prime
+				// i is prime, mark all multiples as not prime.
+				// all multiples of i < i^2 will have already been marked.
 				for j := i * i; j > i && j < n; j += i {
 					b.Set(j)
 				}
