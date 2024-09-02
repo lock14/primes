@@ -64,7 +64,8 @@ func primesLessThan(n int) iter.Seq[int] {
 		for i := 4; i < n; i += 2 {
 			b.Set(i)
 		}
-		for i := 3; (i*i) > i && (i*i) < n; i += 2 {
+		sqrtN := int(math.Sqrt(float64(n)))
+		for i := 3; i < sqrtN; i += 2 {
 			if !b.Get(i) {
 				// i is prime, mark all multiples as not prime.
 				// all multiples of i < i^2 will have already been marked.
